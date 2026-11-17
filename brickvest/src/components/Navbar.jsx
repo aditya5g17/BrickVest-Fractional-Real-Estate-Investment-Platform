@@ -31,7 +31,6 @@ function Navbar() {
   const investorLinks = (
     <>
       <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
-      <NavLink to="/recommendations" className={linkClass}>For You</NavLink>
       <NavLink to="/portfolio" className={linkClass}>Portfolio</NavLink>
       <NavLink to="/payments" className={linkClass}>Payments</NavLink>
     </>
@@ -67,7 +66,7 @@ function Navbar() {
           <NavLink to="/" end className={linkClass}>Home</NavLink>
           <NavLink to="/marketplace" className={linkClass}>Invest</NavLink>
           <NavLink to="/market-feed" className={linkClass}>Market Feed</NavLink>
-          <NavLink to="/calculator" className={linkClass}>Calculator</NavLink>
+          {/* Calculator moved out of primary nav to keep header minimal */}
           {currentUser && !isOnboardingComplete && !isAdmin && (
             <NavLink to="/onboarding" className="text-sm font-semibold text-[var(--gold)]">
               Complete Setup
@@ -79,6 +78,13 @@ function Navbar() {
             <NavLink to="/profile" className={linkClass}>Profile</NavLink>
           )}
         </nav>
+
+        {/* Separate 'For You' pill to highlight recommendations */}
+        <div className="hidden lg:flex lg:items-center lg:ml-4">
+          <NavLink to="/recommendations" className={({ isActive }) => `for-you-pill ${isActive ? 'for-you-pill-active' : ''}`}>
+            For You
+          </NavLink>
+        </div>
 
         <div className="hidden items-center gap-3 lg:flex">
           {currentUser && (isOnboardingComplete || isAdmin) && <NotificationBell />}
@@ -111,6 +117,7 @@ function Navbar() {
             <NavLink to="/marketplace" className={linkClass}>Invest</NavLink>
             <NavLink to="/market-feed" className={linkClass}>Market Feed</NavLink>
             <NavLink to="/calculator" className={linkClass}>Calculator</NavLink>
+            <NavLink to="/recommendations" className={linkClass}>For You</NavLink>
             {currentUser && !isOnboardingComplete && !isAdmin && (
               <NavLink to="/onboarding" className="font-semibold text-[var(--gold)]">
                 Complete Setup

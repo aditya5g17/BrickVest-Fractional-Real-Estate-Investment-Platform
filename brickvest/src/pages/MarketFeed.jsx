@@ -65,15 +65,15 @@ function MarketFeed() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-7xl">
+    <div className="page-shell bg-[var(--surface)] text-[var(--navy)]">
+      <div className="page-container py-16">
         <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gold)]">
               Raw Market Feed
             </p>
             <h1 className="text-4xl font-bold">Live Market Opportunities</h1>
-            <p className="mt-3 max-w-2xl text-gray-400">
+            <p className="mt-3 max-w-2xl text-muted">
               This is a demo feed. In the future, this section will fetch live listings from paid APIs or broker feeds.
             </p>
           </div>
@@ -82,7 +82,7 @@ function MarketFeed() {
             <select
               value={city}
               onChange={(event) => setCity(event.target.value)}
-              className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white outline-none focus:border-blue-500"
+              className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--navy)] outline-none focus:border-[var(--gold)]"
             >
               {cities.map((item) => (
                 <option key={item} value={item}>
@@ -94,7 +94,7 @@ function MarketFeed() {
             <select
               value={type}
               onChange={(event) => setType(event.target.value)}
-              className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white outline-none focus:border-blue-500"
+              className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--navy)] outline-none focus:border-[var(--gold)]"
             >
               {types.map((item) => (
                 <option key={item} value={item}>
@@ -105,12 +105,12 @@ function MarketFeed() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-100">
+        <div className="mb-6 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] p-4 text-sm text-[var(--navy)]">
           Market Feed listings are not investment-ready. Review them and publish to Verified Properties.
         </div>
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
+          <div className="mb-6 rounded-xl border border-[var(--danger)]/30 bg-[var(--danger)]/10 p-4 text-sm text-[var(--danger)]">
             {error}
           </div>
         )}
@@ -120,7 +120,7 @@ function MarketFeed() {
             const isSaved = savedIds.includes(property.id);
 
             return (
-              <div key={property.id} className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900 shadow-lg">
+              <div key={property.id} className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
                 <img
                   src={property.image}
                   alt={property.title}
@@ -129,23 +129,23 @@ function MarketFeed() {
 
                 <div className="p-6">
                   <div className="mb-4 flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-blue-500/10 px-3 py-1 text-sm text-blue-300">
+                    <span className="rounded-full bg-[var(--gold-pale)] px-3 py-1 text-sm text-[var(--gold)]">
                       {property.type}
                     </span>
-                    <span className="text-sm text-gray-400">{property.source}</span>
+                    <span className="text-sm text-muted">{property.source}</span>
                   </div>
 
-                  <h2 className="mb-2 text-xl font-semibold">{property.title}</h2>
-                  <p className="mb-3 text-gray-400">{property.location}</p>
+                  <h2 className="mb-2 text-xl font-semibold text-[var(--navy)]">{property.title}</h2>
+                  <p className="mb-3 text-muted">{property.location}</p>
 
                   <div className="mb-5 grid grid-cols-2 gap-3 text-sm">
-                    <div className="rounded-lg bg-gray-950 p-3">
-                      <p className="text-gray-500">Price</p>
-                      <p className="font-semibold text-blue-400">Rs.{property.price.toLocaleString()}</p>
+                    <div className="rounded-lg bg-[var(--cream)] p-3">
+                      <p className="text-[var(--navy-mid)]">Price</p>
+                      <p className="font-semibold text-[var(--navy)]">Rs.{property.price.toLocaleString()}</p>
                     </div>
-                    <div className="rounded-lg bg-gray-950 p-3">
-                      <p className="text-gray-500">Area</p>
-                      <p className="font-semibold">{property.area}</p>
+                    <div className="rounded-lg bg-[var(--cream)] p-3">
+                      <p className="text-[var(--navy-mid)]">Area</p>
+                      <p className="font-semibold text-[var(--navy)]">{property.area}</p>
                     </div>
                   </div>
 
@@ -155,8 +155,8 @@ function MarketFeed() {
                     disabled={savingId === property.id || isSaved}
                     className={`w-full rounded-lg px-4 py-3 font-semibold ${
                       isSaved
-                        ? "border border-green-500/40 bg-green-500/10 text-green-300"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
+                        ? "border border-[var(--success)]/40 bg-[var(--success)]/10 text-[var(--success)]"
+                        : "bg-[var(--navy)] text-white hover:bg-[var(--navy-mid)]"
                     }`}
                   >
                     {savingId === property.id ? "Saving..." : isSaved ? "Saved for Review" : "Save for Review"}

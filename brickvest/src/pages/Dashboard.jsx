@@ -219,48 +219,48 @@ function Dashboard() {
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+          <div className="card p-6">
             <h2 className="mb-4 text-xl font-semibold">This Month</h2>
             <div className="space-y-3 text-sm">
               <p>
                 Rental income:{" "}
-                <span className="font-semibold text-green-300">
+                <span className="font-semibold text-[var(--success)]">
                   {formatCurrency(thisMonth.rentalIncome)} {thisMonth.credited ? "credited" : ""}
                 </span>
               </p>
-              <p className="text-gray-400">Last credit: {thisMonth.lastCreditLabel}</p>
-              <p className="text-gray-400">
+              <p className="text-muted">Last credit: {thisMonth.lastCreditLabel}</p>
+              <p className="text-muted">
                 Next credit: {thisMonth.nextCreditLabel} ({thisMonth.daysUntilNext} days)
               </p>
               <button
                 type="button"
                 onClick={handleSimulateRentCredit}
                 disabled={creditingRent || !summary?.monthlyRent}
-                className="mt-4 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-4 rounded-lg bg-[var(--success)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--success)]/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {creditingRent ? "Crediting..." : "Simulate rent credit (demo)"}
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+          <div className="card p-6">
             <h2 className="mb-4 text-xl font-semibold">Performance</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="rounded-lg bg-gray-950 p-4">
-                <p className="text-gray-500">ROI</p>
-                <p className="text-2xl font-bold text-blue-400">{summary?.roiPercent || 0}%</p>
+              <div className="rounded-lg bg-[var(--cream)] p-4">
+                <p className="text-[var(--navy-mid)]">ROI</p>
+                <p className="text-2xl font-bold text-[var(--navy)]">{summary?.roiPercent || 0}%</p>
               </div>
-              <div className="rounded-lg bg-gray-950 p-4">
-                <p className="text-gray-500">Avg. yield</p>
-                <p className="text-2xl font-bold text-green-400">{summary?.avgYield || 0}%</p>
+              <div className="rounded-lg bg-[var(--cream)] p-4">
+                <p className="text-[var(--navy-mid)]">Avg. yield</p>
+                <p className="text-2xl font-bold text-[var(--success)]">{summary?.avgYield || 0}%</p>
               </div>
-              <div className="rounded-lg bg-gray-950 p-4">
-                <p className="text-gray-500">Properties</p>
-                <p className="text-2xl font-bold">{summary?.propertyCount || 0}</p>
+              <div className="rounded-lg bg-[var(--cream)] p-4">
+                <p className="text-[var(--navy-mid)]">Properties</p>
+                <p className="text-2xl font-bold text-[var(--navy)]">{summary?.propertyCount || 0}</p>
               </div>
-              <div className="rounded-lg bg-gray-950 p-4">
-                <p className="text-gray-500">Capital gain (demo)</p>
-                <p className="text-2xl font-bold text-yellow-300">
+              <div className="rounded-lg bg-[var(--cream)] p-4">
+                <p className="text-[var(--navy-mid)]">Capital gain (demo)</p>
+                <p className="text-2xl font-bold text-[var(--gold)]">
                   {formatCurrency(Math.round((summary?.currentValue || 0) - (summary?.totalInvested || 0)))}
                 </p>
               </div>
@@ -269,10 +269,10 @@ function Dashboard() {
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 lg:col-span-2">
+          <div className="card p-6 lg:col-span-2">
             <h2 className="mb-4 text-xl font-semibold">Income History</h2>
             {incomeHistory.length === 0 ? (
-              <p className="text-gray-400">Invest to see your rent history here.</p>
+              <p className="text-muted">Invest to see your rent history here.</p>
             ) : (
               <>
                 <Line
@@ -281,14 +281,14 @@ function Dashboard() {
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
-                      x: { ticks: { color: "#9ca3af" }, grid: { color: "#1f2937" } },
-                      y: { ticks: { color: "#9ca3af" }, grid: { color: "#1f2937" } },
+                      x: { ticks: { color: "#64748b" }, grid: { color: "#e2e8f0" } },
+                      y: { ticks: { color: "#64748b" }, grid: { color: "#e2e8f0" } },
                     },
                   }}
                 />
                 <div className="mt-4 space-y-2">
                   {incomeHistory.map((row) => (
-                    <div key={row.label} className="flex justify-between text-sm text-gray-300">
+                    <div key={row.label} className="flex justify-between text-sm text-[var(--navy-mid)]">
                       <span>{row.label}</span>
                       <span>{formatCurrency(row.amount)}</span>
                     </div>
@@ -299,7 +299,7 @@ function Dashboard() {
           </div>
 
           {chartData && summary?.propertyCount > 0 && (
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+            <div className="card p-6">
               <h2 className="mb-4 text-xl font-semibold">Allocation</h2>
               <Doughnut data={chartData} />
             </div>
@@ -348,56 +348,56 @@ function Dashboard() {
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+          <div className="card p-6">
             <h2 className="mb-4 text-xl font-semibold">Tax Summary (Demo)</h2>
             <div className="space-y-2 text-sm">
               <p>Taxable rental income: {formatCurrency(taxSummary.taxableIncome)}</p>
               <p>TDS deducted ({taxSummary.tdsRatePercent}%): {formatCurrency(taxSummary.tdsDeducted)}</p>
-              <p className="font-semibold text-green-300">Net income: {formatCurrency(taxSummary.netIncome)}</p>
-              <p className="text-xs text-gray-500">{taxSummary.note}</p>
+              <p className="font-semibold text-[var(--success)]">Net income: {formatCurrency(taxSummary.netIncome)}</p>
+              <p className="text-xs text-muted">{taxSummary.note}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={handleDownloadJson}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold hover:bg-blue-700"
+                className="rounded-lg bg-[var(--navy)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--navy-mid)]"
               >
                 Download JSON
               </button>
               <button
                 type="button"
                 onClick={handleDownloadCsv}
-                className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-semibold hover:border-blue-500"
+                className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-semibold hover:border-[var(--navy)]"
               >
                 Download CSV
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+          <div className="card p-6">
             <h2 className="mb-4 text-xl font-semibold">New Opportunities</h2>
             {opportunities.length === 0 ? (
-              <p className="text-gray-400">No open listings right now.</p>
+              <p className="text-muted">No open listings right now.</p>
             ) : (
               <div className="space-y-3">
                 {opportunities.map((property) => (
                   <Link
                     key={property.id}
                     to={`/property/${property.id}`}
-                    className="block rounded-lg border border-gray-800 bg-gray-950 p-4 hover:border-blue-500"
+                    className="block rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 hover:border-[var(--navy)]"
                   >
-                    <p className="font-semibold">{property.title}</p>
-                    <p className="text-sm text-gray-400">{property.location}</p>
-                    <p className="mt-1 text-sm text-green-400">{property.rentalYield}% yield</p>
+                    <p className="font-semibold text-[var(--navy)]">{property.title}</p>
+                    <p className="text-sm text-[var(--navy-mid)]">{property.location}</p>
+                    <p className="mt-1 text-sm text-[var(--success)]">{property.rentalYield}% yield</p>
                   </Link>
                 ))}
               </div>
             )}
             <div className="mt-4 flex flex-wrap gap-4 text-sm">
-              <Link to="/recommendations" className="text-blue-400 hover:text-blue-300">
+              <Link to="/recommendations" className="text-[var(--gold)] hover:text-[var(--gold-light)]">
                 Smart recommendations →
               </Link>
-              <Link to="/marketplace" className="text-blue-400 hover:text-blue-300">
+              <Link to="/marketplace" className="text-[var(--gold)] hover:text-[var(--gold-light)]">
                 View all properties →
               </Link>
             </div>

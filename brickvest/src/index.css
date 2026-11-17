@@ -99,6 +99,16 @@ textarea {
   color: var(--navy);
 }
 
+/* Hero heading override - used on the Home hero to ensure white text over background */
+.hero-heading {
+  color: #ffffff;
+}
+
+/* Ensure any heading inside the hero background is white (more specific selector) */
+.hero-bg .heading-display {
+  color: #ffffff;
+}
+
 .heading-section {
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -131,6 +141,18 @@ textarea {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: rgba(184, 134, 46, 0.25);
+}
+
+/* Hero background */
+.hero-bg {
+  /* dark-to-transparent gradient fallback + image */
+  background-image: linear-gradient(90deg, rgba(10,37,64,0.65), rgba(10,37,64,0.2)), url('/hero-bg.jpg'), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80');
+  background-color: var(--navy);
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  min-height: 420px;
 }
 
 /* Buttons */
@@ -391,3 +413,89 @@ textarea {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+
+/* Floating accent animation for decorative graphics */
+@keyframes float-y {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+.accent-blob {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.75;
+  filter: blur(6px);
+  transform-origin: center;
+  animation: float-y 6s ease-in-out infinite;
+}
+
+.hero-accent-1 { right: 6%; top: 12%; width: 320px; }
+.hero-accent-2 { left: 4%; top: 30%; width: 220px; animation-duration: 8s; opacity: 0.5 }
+
+/* Micro-interactions for buttons */
+.btn { transition: transform 180ms ease, box-shadow 180ms ease; }
+.btn:active { transform: translateY(1px) scale(0.995); }
+
+/* subtle fade-in for sections (used with motion fallback) */
+.section-fade { opacity: 0; transform: translateY(10px); transition: opacity 420ms ease, transform 420ms ease; }
+.section-fade.in { opacity: 1; transform: none; }
+
+/* CTA pulse */
+@keyframes pulse-cta {
+  0% { box-shadow: 0 6px 18px rgba(184,134,46,0.14); transform: translateY(0) scale(1); }
+  50% { box-shadow: 0 12px 30px rgba(184,134,46,0.12); transform: translateY(-2px) scale(1.02); }
+ 100% { box-shadow: 0 6px 18px rgba(184,134,46,0.14); transform: translateY(0) scale(1); }
+}
+
+.btn-primary.pulse {
+  animation: pulse-cta 2.6s ease-in-out infinite;
+}
+
+/* button shimmer */
+.btn-primary.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0) 100%);
+  transform: translateX(-120%);
+  transition: transform 0.9s ease;
+  border-radius: inherit;
+}
+.btn-primary.shimmer:hover::after { transform: translateX(120%); }
+
+/* SVG stroke draw */
+.draw-path path,
+.draw-path line,
+.draw-path rect,
+.draw-path circle {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: draw 2s ease forwards;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Parallax helper: will be updated via transform variables */
+.parallax { transform: translate3d(var(--px,0), var(--py,0), 0) scale(var(--ps,1)); transition: transform 0.12s linear; }
+
+/* Slightly stronger card hover for sexy effect */
+.card-hover:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 18px 40px rgba(10,37,64,0.12); }
+
+/* For You pill */
+.for-you-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  color: var(--gold);
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+.for-you-pill:hover { transform: translateY(-3px) scale(1.02); }
+.for-you-pill-active { background: linear-gradient(90deg, var(--gold), #f7d88b); color: #062233; }

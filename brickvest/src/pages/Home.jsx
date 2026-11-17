@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
 import {
   FiArrowRight,
   FiBarChart2,
@@ -15,7 +16,7 @@ import { db } from "../firebase/config";
 import { normalizeProperty } from "../utils/propertyHelpers";
 
 const STATS = [
-  { value: "₹50 Cr+", label: "Assets Listed" },
+  { value: "₹52 Cr+", label: "Assets Listed" },
   { value: "2,400+", label: "Active Investors" },
   { value: "8.2%", label: "Avg. Rental Yield" },
   { value: "45+", label: "Verified Properties" },
@@ -24,21 +25,21 @@ const STATS = [
 const STEPS = [
   {
     step: "01",
-    title: "Browse & Select",
+    title: "Discover Properties",
     description:
-      "Explore institutionally vetted residential and commercial properties with transparent yields and funding progress.",
+      "Explore institutionally vetted residential, commercial, and mixed-use assets with clear yield projections.",
   },
   {
     step: "02",
-    title: "Invest from ₹5,000",
+    title: "Invest Fractionally",
     description:
-      "Purchase fractional shares via secure checkout. Own a slice of premium real estate without full property cost.",
+      "Buy verified shares from ₹5,000 and gain exposure to premium property assets without full ownership.",
   },
   {
     step: "03",
-    title: "Earn & Track",
+    title: "Track Returns",
     description:
-      "Receive monthly rental income, monitor portfolio performance, and download ownership certificates from your dashboard.",
+      "Monitor rental income, funding progress, and ownership certificates on your investor dashboard.",
   },
 ];
 
@@ -61,7 +62,7 @@ const BENEFITS = [
   {
     icon: FiUsers,
     title: "Built for Individuals",
-    description: "Access the same asset class as institutions, starting with amounts as low as ₹5,000 per share.",
+    description: "Access the same asset class as institutions with investments from ₹5,000.",
   },
 ];
 
@@ -70,19 +71,19 @@ const PROPERTY_TYPES = [
     id: "residential",
     title: "Residential",
     description: "Premium apartments and homes in high-demand metros with stable rental occupancy.",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1565182999561-5c4d0e97c58e?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: "commercial",
     title: "Commercial",
     description: "Grade-A office and retail spaces offering stronger yields and longer lease tenures.",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: "mixed",
     title: "Mixed Use",
     description: "Diversified assets combining residential and commercial income streams in one investment.",
-    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1553456558-aff63285bdd2?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -94,6 +95,8 @@ const fadeUp = {
 function Home() {
   const navigate = useNavigate();
   const [featured, setFeatured] = useState([]);
+  const heroRef = useRef(null);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const loadFeatured = async () => {
@@ -113,50 +116,105 @@ function Home() {
         setFeatured([]);
       }
     };
+
     loadFeatured();
   }, []);
 
+  const { isAuthenticated } = useAuth();
+
+  // small animated counter hook
+  function useCount(target, duration = 900) {
+    const [n, setN] = useState(0);
+    useEffect(() => {
+      let start = null;
+      const from = 0;
+      const to = Number(String(target).replace(/[^0-9.]/g, "")) || target;
+      const raf = (ts) => {
+        if (!start) start = ts;
+        const progress = Math.min((ts - start) / duration, 1);
+        setN(Math.round(from + (to - from) * progress));
+        if (progress < 1) requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+      return () => {};
+    }, [target, duration]);
+    return n;
+  }
+
+  const handleHeroMove = (e) => {
+    const el = heroRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / rect.width;
+    const dy = (e.clientY - cy) / rect.height;
+    // small translate values
+    el.style.setProperty('--px', `${dx * 18}px`);
+    el.style.setProperty('--py', `${dy * 12}px`);
+  };
+
   return (
     <div>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[var(--navy)] text-white">
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--navy)] via-[var(--navy)]/95 to-[var(--navy)]/80" />
+      <section ref={heroRef} onMouseMove={handleHeroMove} className="relative overflow-hidden hero-bg text-white">
+        <div className="absolute inset-0 bg-[var(--navy)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--navy)]/75 via-[var(--navy)]/60 to-[var(--navy)]/30" />
+
+        {/* Decorative SVG blobs */}
+        <svg className="accent-blob hero-accent-1" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0%" stopColor="rgba(180,150,80,0.12)" />
+              <stop offset="100%" stopColor="rgba(10,30,70,0.14)" />
+            </linearGradient>
+          </defs>
+          <g fill="url(#g1)">
+            <ellipse cx="320" cy="90" rx="260" ry="120" />
+          </g>
+        </svg>
+
+        <svg className="accent-blob hero-accent-2" viewBox="0 0 450 300" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <defs>
+            <linearGradient id="g2" x1="0" x2="1">
+              <stop offset="0%" stopColor="rgba(200,200,220,0.06)" />
+              <stop offset="100%" stopColor="rgba(10,30,70,0.06)" />
+            </linearGradient>
+          </defs>
+          <g fill="url(#g2)">
+            <rect x="10" y="10" rx="36" ry="36" width="420" height="220" />
+          </g>
+        </svg>
 
         <div className="page-container relative section-pad">
           <motion.div
             initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
             animate="visible"
             variants={fadeUp}
-            className="max-w-3xl"
+            className="grid gap-10 lg:grid-cols-[1.5fr_minmax(320px,1fr)] items-start"
           >
             <span className="badge badge-gold mb-6 inline-flex">
               Fractional Real Estate Platform
             </span>
-            <h1 className="heading-display text-4xl text-white md:text-6xl lg:text-7xl">
-              Institutional investing,{" "}
-              <em className="text-[var(--gold-light)] not-italic">for everyone</em>
+            <p className="text-sm uppercase tracking-[0.36em] text-white/60">
+              Manager to modern property investments
+            </p>
+            <h1 className="heading-display hero-heading mt-4 text-4xl md:text-6xl lg:text-7xl">
+              Invest in premium real estate with institutional-grade transparency.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
-              Own verified premium properties from ₹5,000. Earn passive rental income,
-              track your portfolio, and invest alongside a growing community of fractional owners.
+              Own verified fractional shares in residential, commercial, and mixed-use properties.
+              Track your portfolio, manage ownership, and receive digital investment reports.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex flex-wrap gap-4 items-center">
               <button
                 type="button"
                 onClick={() => navigate("/marketplace")}
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary btn-lg pulse shimmer relative overflow-hidden"
               >
                 Explore Properties
-                <FiArrowRight />
+                <FiArrowRight className="ml-2" />
               </button>
               <button
                 type="button"
@@ -167,7 +225,7 @@ function Home() {
               </button>
             </div>
             <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-white/60">
-              {["SEBI-style disclosures", "Verified listings", "Monthly rent tracking"].map(
+              {["SEBI-style disclosures", "Verified property diligence", "Monthly rent tracking"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-2">
                     <FiCheckCircle className="text-[var(--gold-light)]" />
@@ -176,25 +234,51 @@ function Home() {
                 )
               )}
             </ul>
+
+            {/* Removed 'Why choose us' per user request */}
           </motion.div>
         </div>
       </section>
 
-      {/* Stats */}
       <section className="border-b border-[var(--border)] bg-white">
-        <div className="page-container">
-          <div className="grid grid-cols-2 divide-x divide-[var(--border)] md:grid-cols-4">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="stat-block py-8 md:py-10">
-                <p className="stat-value">{stat.value}</p>
-                <p className="stat-label">{stat.label}</p>
+        <div className="page-container section-pad">
+          <div className="grid gap-8 lg:grid-cols-5 lg:items-center">
+            <div className="lg:col-span-2">
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--gold)]">
+                Trusted by investors
+              </p>
+              <h2 className="heading-section mt-4">
+                Backed by institutional-grade process and digital investor tools.
+              </h2>
+              <p className="mt-4 text-muted">
+                Our demo platform brings fractional ownership to verified property assets, supported by clear disclosures,
+                funding dashboards, and secure investment workflows.
+              </p>
+            </div>
+            <div className="lg:col-span-3">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                {STATS.map((stat, idx) => {
+                  // numeric target for simple animated counts
+                  const raw = String(stat.value).replace(/[^0-9]/g, "");
+                  const target = raw ? Number(raw) : stat.value;
+                  const count = useCount(target, 900 + idx * 120);
+                  return (
+                    <motion.div key={stat.label} className="rounded-3xl border border-[var(--border)] bg-[var(--cream)] p-6 text-center"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.12 }}
+                    >
+                      <p className="stat-value">{typeof target === 'number' ? (count >= target ? stat.value : `${count}${stat.value.replace(/[0-9]/g,'')}`) : stat.value}</p>
+                      <p className="stat-label mt-2">{stat.label}</p>
+                    </motion.div>
+                  );
+                })}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured properties */}
       {featured.length > 0 && (
         <section className="section-pad bg-[var(--cream)]">
           <div className="page-container">
@@ -220,14 +304,13 @@ function Home() {
         </section>
       )}
 
-      {/* How it works */}
       <section className="section-pad bg-white">
         <div className="page-container">
           <div className="mx-auto mb-14 max-w-2xl text-center">
             <div className="divider-gold mx-auto mb-4" />
-            <h2 className="heading-section">How BrickVest Works</h2>
+            <h2 className="heading-section">How it works</h2>
             <p className="mt-3 text-muted">
-              A simple three-step journey from browsing to earning rental income.
+              A simple path from property discovery to income tracking.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -246,24 +329,35 @@ function Home() {
         </div>
       </section>
 
-      {/* Benefits */}
       <section className="section-pad bg-[var(--cream)]">
         <div className="page-container">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <div className="divider-gold mb-4" />
               <h2 className="heading-section">
-                Where investing meets{" "}
-                <span className="text-[var(--gold)]">transparency</span>
+                Where investing meets <span className="text-[var(--gold)]">technology</span>
               </h2>
               <p className="mt-4 text-muted leading-relaxed">
-                Inspired by institutional real estate platforms, BrickVest brings due diligence,
-                clear metrics, and portfolio tracking to individual fractional investors.
+                Use digital reporting, real-time funding updates, and guided insights to manage your portfolio with confidence.
               </p>
-              <Link to="/register" className="btn btn-primary mt-8">
-                Create Free Account
-                <FiArrowRight />
-              </Link>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl border border-[var(--border)] bg-white p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)]">Digital reports</p>
+                  <p className="mt-3 text-sm text-muted">Access yield, funding, and ownership data in one dashboard.</p>
+                </div>
+                <div className="rounded-3xl border border-[var(--border)] bg-white p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)]">Transparent fees</p>
+                  <p className="mt-3 text-sm text-muted">No hidden charges in this demo — just clear costs and share pricing.</p>
+                </div>
+                <div className="rounded-3xl border border-[var(--border)] bg-white p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)]">Verified assets</p>
+                  <p className="mt-3 text-sm text-muted">Every listing is reviewed before going live on the marketplace.</p>
+                </div>
+                <div className="rounded-3xl border border-[var(--border)] bg-white p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)]">Investor alignment</p>
+                  <p className="mt-3 text-sm text-muted">Ownership is structured to keep investor interests aligned with asset performance.</p>
+                </div>
+              </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {BENEFITS.map(({ icon: Icon, title, description }) => (
@@ -280,28 +374,21 @@ function Home() {
         </div>
       </section>
 
-      {/* Property types */}
       <section className="section-pad bg-white">
         <div className="page-container">
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <div className="divider-gold mx-auto mb-4" />
             <h2 className="heading-section">Invest Across Asset Classes</h2>
             <p className="mt-3 text-muted">
-              Residential, commercial, or mixed-use — diversify your fractional portfolio.
+              Residential, commercial, and mixed-use opportunities for portfolio diversification.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {PROPERTY_TYPES.map((type) => (
               <article key={type.id} className="card card-hover overflow-hidden">
-                <img
-                  src={type.image}
-                  alt={type.title}
-                  className="h-52 w-full object-cover"
-                />
+                <img src={type.image} alt={type.title} className="h-52 w-full object-cover" />
                 <div className="p-6">
-                  <h3 className="font-display text-2xl font-semibold text-[var(--navy)]">
-                    {type.title}
-                  </h3>
+                  <h3 className="font-display text-2xl font-semibold text-[var(--navy)]">{type.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{type.description}</p>
                   <button
                     type="button"
@@ -317,19 +404,21 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="bg-[var(--navy)] py-16 text-white">
         <div className="page-container text-center">
           <h2 className="font-display text-3xl font-semibold md:text-4xl">
             Ready to build your real estate portfolio?
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-white/65">
-            Join thousands of investors who start with as little as ₹5,000 per share.
+            Join a demo platform designed for clear investment decisions, digital portfolio tracking, and seamless property access.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link to="/register" className="btn btn-primary btn-lg">
-              Get Started Free
-            </Link>
+            {/** Hide the register CTA when the user is authenticated */}
+            {!isAuthenticated && (
+              <Link to="/register" className="btn btn-primary btn-lg">
+                Get Started Free
+              </Link>
+            )}
             <Link
               to="/marketplace"
               className="btn btn-outline btn-lg !border-white/30 !text-white hover:!border-[var(--gold-light)] hover:!text-[var(--gold-light)]"

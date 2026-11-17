@@ -40,19 +40,19 @@ function PaymentHistory() {
   }, [currentUser]);
 
   return (
-    <div className="min-h-screen bg-gray-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-5xl">
+    <div className="page-shell bg-[var(--surface)] text-[var(--navy)]">
+      <div className="page-container py-16">
         <h1 className="mb-2 text-3xl font-bold">Payment History</h1>
-        <p className="mb-8 text-gray-400">
+        <p className="mb-8 text-muted">
           View all your investment payments and their status here.
         </p>
 
         {loading ? (
-          <p className="text-gray-400">Loading payments...</p>
+          <p className="text-muted">Loading payments...</p>
         ) : payments.length === 0 ? (
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-8 text-center">
-            <p className="text-gray-400">No payment records yet.</p>
-            <Link to="/marketplace" className="mt-4 inline-block text-blue-400 hover:text-blue-300">
+          <div className="card p-8 text-center">
+            <p className="text-muted">No payment records yet.</p>
+            <Link to="/marketplace" className="mt-4 inline-block text-[var(--gold)] hover:text-[var(--gold-light)]">
               Browse properties
             </Link>
           </div>
@@ -61,20 +61,20 @@ function PaymentHistory() {
             {payments.map((payment) => (
               <div
                 key={payment.id}
-                className="rounded-xl border border-gray-800 bg-gray-900 p-5"
+                className="card p-5"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <h2 className="text-lg font-semibold">{payment.propertyTitle}</h2>
-                    <p className="text-sm text-gray-400">{formatDate(payment.createdAt)}</p>
+                    <h2 className="text-lg font-semibold text-[var(--navy)]">{payment.propertyTitle}</h2>
+                    <p className="text-sm text-muted">{formatDate(payment.createdAt)}</p>
                   </div>
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-semibold ${
                       payment.status === "paid"
-                        ? "bg-green-500/10 text-green-300"
+                        ? "bg-[var(--success)]/10 text-[var(--success)]"
                         : payment.status === "failed" || payment.status === "otp_failed"
-                          ? "bg-red-500/10 text-red-300"
-                          : "bg-yellow-500/10 text-yellow-200"
+                          ? "bg-[var(--danger)]/10 text-[var(--danger)]"
+                          : "bg-[var(--gold)]/10 text-[var(--gold)]"
                     }`}
                   >
                     {paymentStatusLabel(payment.status)}
@@ -83,16 +83,16 @@ function PaymentHistory() {
 
                 <div className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
                   <div>
-                    <p className="text-gray-500">Amount</p>
-                    <p className="font-semibold text-blue-400">{formatCurrency(payment.amount)}</p>
+                    <p className="text-[var(--navy-mid)]">Amount</p>
+                    <p className="font-semibold text-[var(--navy)]">{formatCurrency(payment.amount)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Shares</p>
-                    <p className="font-semibold">{payment.shares}</p>
+                    <p className="text-[var(--navy-mid)]">Shares</p>
+                    <p className="font-semibold text-[var(--navy)]">{payment.shares}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Provider</p>
-                    <p className="font-semibold">
+                    <p className="text-[var(--navy-mid)]">Provider</p>
+                    <p className="font-semibold text-[var(--navy)]">
                       {payment.provider === "brickvest_sandbox" ? "Sandbox" : "Razorpay"}
                     </p>
                   </div>
@@ -101,7 +101,7 @@ function PaymentHistory() {
                 {payment.propertyId && (
                   <Link
                     to={`/property/${payment.propertyId}`}
-                    className="mt-4 inline-block text-sm text-blue-400 hover:text-blue-300"
+                    className="mt-4 inline-block text-sm text-[var(--gold)] hover:text-[var(--gold-light)]"
                   >
                     View property
                   </Link>

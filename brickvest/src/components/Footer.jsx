@@ -6,7 +6,7 @@ const FOOTER_LINKS = {
     { to: "/marketplace", label: "Verified Properties" },
     { to: "/market-feed", label: "Market Feed" },
     { to: "/calculator", label: "Returns Calculator" },
-    { to: "/recommendations", label: "Smart Match" },
+    { to: "/recommendations", label: "Recommended Assets" },
   ],
   Platform: [
     { to: "/dashboard", label: "Dashboard" },
@@ -35,8 +35,7 @@ function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">
-              Institutional-grade fractional real estate investing for individual investors.
-              Own premium assets, earn rental income, and track your portfolio — all in one place.
+              A technology-first fractional property platform with verified listings, income reporting, and investor-grade dashboards.
             </p>
             <div className="mt-6 space-y-2 text-sm text-white/55">
               <p className="flex items-center gap-2">
@@ -80,8 +79,8 @@ function Footer() {
             © 2026 BrickVest. All rights reserved.
           </p>
           <p className="max-w-lg text-center text-xs leading-relaxed text-white/40 md:text-right">
-            Demo platform — not SEBI registered. Listings and returns are illustrative.
-            Not financial advice. Past performance does not guarantee future results.
+            Demo platform — not SEBI registered. Listings and returns are illustrative. Not financial advice.
+            Past performance does not guarantee future results.
           </p>
         </div>
       </div>

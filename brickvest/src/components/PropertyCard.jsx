@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   getDaysUntilDeadline,
   getFundingStatus,
@@ -29,8 +30,21 @@ function PropertyCard({ property, investorCount = 0 }) {
   const fundingStatus = getFundingStatus(property);
   const daysLeft = getDaysUntilDeadline(property);
 
+  const cardVariant = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45 } },
+    hover: { scale: 1.02, transition: { duration: 0.18 } },
+  };
+
   return (
-    <article className="card card-hover flex flex-col overflow-hidden">
+    <motion.article
+      className="card card-hover flex flex-col overflow-hidden"
+      initial="hidden"
+      whileInView="visible"
+      whileHover="hover"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={cardVariant}
+    >
       <div className="relative">
         <img
           src={property?.image}
@@ -113,7 +127,7 @@ function PropertyCard({ property, investorCount = 0 }) {
           </span>
         )}
       </div>
-    </article>
+    </motion.article>
   );
 }
 

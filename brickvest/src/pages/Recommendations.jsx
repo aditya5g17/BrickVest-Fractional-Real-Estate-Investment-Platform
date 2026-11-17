@@ -42,47 +42,47 @@ function Recommendations() {
   const summary = buildProfileSummary(userProfile);
 
   return (
-    <div className="min-h-screen bg-gray-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-5xl">
-        <p className="text-sm font-semibold uppercase tracking-wide text-blue-400">
+    <div className="page-shell bg-[var(--surface)] text-[var(--navy)]">
+      <div className="page-container py-16">
+        <p className="text-sm font-semibold uppercase tracking-wide text-[var(--gold)]">
           Smart Match (Demo)
         </p>
         <h1 className="mt-2 text-3xl font-bold">Recommendations For You</h1>
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-muted">
           Rule-based scoring — real ML will ship in production. Not financial advice.
         </p>
 
-        <div className="mt-6 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-100">
+        <div className="mt-6 card border border-[var(--gold)]/30 bg-[var(--gold)]/10 p-4 text-sm text-[var(--gold)]">
           Demo recommendations — not financial advice. Scores are illustrative only.
         </div>
 
-        <div className="mt-6 grid gap-3 rounded-xl border border-gray-800 bg-gray-900 p-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-xs text-gray-500">Risk</p>
-            <p className="font-semibold capitalize">{summary.risk}</p>
+            <p className="text-xs text-[var(--navy-mid)]">Risk</p>
+            <p className="font-semibold capitalize text-[var(--navy)]">{summary.risk}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">Goal</p>
-            <p className="font-semibold capitalize">{summary.goal}</p>
+            <p className="text-xs text-[var(--navy-mid)]">Goal</p>
+            <p className="font-semibold capitalize text-[var(--navy)]">{summary.goal}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">City</p>
-            <p className="font-semibold">{summary.city}</p>
+            <p className="text-xs text-[var(--navy-mid)]">City</p>
+            <p className="font-semibold text-[var(--navy)]">{summary.city}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">Budget / share</p>
-            <p className="font-semibold">{summary.budgetLabel}</p>
+            <p className="text-xs text-[var(--navy-mid)]">Budget / share</p>
+            <p className="font-semibold text-[var(--navy)]">{summary.budgetLabel}</p>
           </div>
         </div>
 
         {loading ? (
-          <p className="mt-10 text-gray-400">Matching properties...</p>
+          <p className="mt-10 text-muted">Matching properties...</p>
         ) : error ? (
-          <p className="mt-10 text-red-300">{error}</p>
+          <p className="mt-10 text-red-500">{error}</p>
         ) : picks.length === 0 ? (
-          <div className="mt-10 rounded-xl border border-gray-800 bg-gray-900 p-8 text-center">
-            <p className="text-gray-400">No open properties match your profile.</p>
-            <Link to="/marketplace" className="mt-4 inline-block text-blue-400">
+          <div className="mt-10 card p-8 text-center">
+            <p className="text-muted">No open properties match your profile.</p>
+            <Link to="/marketplace" className="mt-4 inline-block text-[var(--gold)] hover:text-[var(--gold-light)]">
               Browse marketplace
             </Link>
           </div>
@@ -91,18 +91,17 @@ function Recommendations() {
             {picks.map((pick, index) => (
               <div
                 key={pick.property.id}
-                className="rounded-xl border border-gray-800 bg-gray-900 p-6"
+                className="card p-6"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm text-blue-400">
-                      {index === 0 ? "Best match" : index === 1 ? "Good match" : "Also consider"} · Score{" "}
-                      {pick.score}
+                    <p className="text-sm text-[var(--gold)]">
+                      {index === 0 ? "Best match" : index === 1 ? "Good match" : "Also consider"} · Score {pick.score}
                     </p>
-                    <h2 className="mt-1 text-2xl font-bold">{pick.property.title}</h2>
-                    <p className="text-gray-400">{pick.property.location}</p>
+                    <h2 className="mt-1 text-2xl font-bold text-[var(--navy)]">{pick.property.title}</h2>
+                    <p className="text-muted">{pick.property.location}</p>
                   </div>
-                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm text-green-300">
+                  <span className="rounded-full bg-[var(--success)]/10 px-3 py-1 text-sm text-[var(--success)]">
                     {pick.matchPercent}% match
                   </span>
                 </div>
@@ -115,10 +114,10 @@ function Recommendations() {
                 </div>
 
                 {pick.timing && (
-                  <p className="mt-3 text-sm font-medium text-yellow-200">{pick.timing}</p>
+                  <p className="mt-3 text-sm font-medium text-[var(--gold)]">{pick.timing}</p>
                 )}
 
-                <ul className="mt-3 list-inside list-disc text-sm text-gray-400">
+                <ul className="mt-3 list-inside list-disc text-sm text-muted">
                   {pick.reasons.map((reason) => (
                     <li key={reason}>{reason}</li>
                   ))}
@@ -126,7 +125,7 @@ function Recommendations() {
 
                 <Link
                   to={`/property/${pick.property.id}`}
-                  className="mt-5 inline-flex rounded-lg bg-blue-600 px-5 py-2 font-semibold hover:bg-blue-700"
+                  className="mt-5 inline-flex rounded-lg bg-[var(--navy)] px-5 py-2 font-semibold text-white hover:bg-[var(--navy-mid)]"
                 >
                   View & Invest
                 </Link>
@@ -135,7 +134,7 @@ function Recommendations() {
           </div>
         )}
 
-        <p className="mt-8 text-xs text-gray-500">
+        <p className="mt-8 text-xs text-[var(--navy-mid)]">
           Scoring uses: risk match + goal + city + budget per share + growth + funding deadline.
         </p>
       </div>

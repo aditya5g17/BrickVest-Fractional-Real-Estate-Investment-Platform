@@ -176,37 +176,37 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-7xl">
+    <div className="page-shell bg-[var(--surface)] text-[var(--navy)]">
+      <div className="page-container py-16">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gold)]">
               Admin
             </p>
             <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-            <p className="mt-3 text-gray-400">
+            <p className="mt-3 text-muted">
               Quick overview of platform listings, review queue, and investment activity.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Link to="/review-queue" className="rounded-lg bg-blue-600 px-4 py-3 font-semibold hover:bg-blue-700">
+            <Link to="/review-queue" className="rounded-lg bg-[var(--navy)] px-4 py-3 font-semibold text-white hover:bg-[var(--navy-mid)]">
               Review Queue
             </Link>
-            <Link to="/admin/kyc-queue" className="rounded-lg border border-orange-500/50 px-4 py-3 font-semibold text-orange-200 hover:bg-orange-500/10">
+            <Link to="/admin/kyc-queue" className="rounded-lg border border-[var(--gold)]/40 px-4 py-3 font-semibold text-[var(--gold)] hover:bg-[var(--gold-pale)]">
               KYC Queue ({loading ? "…" : stats.pendingKyc})
             </Link>
-            <Link to="/add-property" className="rounded-lg border border-gray-700 px-4 py-3 font-semibold hover:border-blue-500">
+            <Link to="/add-property" className="rounded-lg border border-[var(--border)] px-4 py-3 font-semibold hover:border-[var(--navy)]">
               Add Property
             </Link>
-            <Link to="/admin/transactions" className="rounded-lg border border-gray-700 px-4 py-3 font-semibold hover:border-blue-500">
+            <Link to="/admin/transactions" className="rounded-lg border border-[var(--border)] px-4 py-3 font-semibold hover:border-[var(--navy)]">
               Transactions
             </Link>
             <button
               type="button"
               onClick={seedDemoProperties}
               disabled={seeding}
-              className="rounded-lg border border-green-500/50 px-4 py-3 font-semibold text-green-200 hover:bg-green-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg border border-[var(--success)]/40 px-4 py-3 font-semibold text-[var(--success)] hover:bg-[var(--success)]/10 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {seeding ? "Seeding..." : "Seed Demo Properties"}
             </button>
@@ -214,21 +214,21 @@ function AdminDashboard() {
         </div>
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
+          <div className="mb-6 card border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
             {error}
           </div>
         )}
 
         {message && (
-          <div className="mb-6 rounded-xl border border-green-500/40 bg-green-500/10 p-4 text-sm text-green-100">
+          <div className="mb-6 card border-green-500/40 bg-green-500/10 p-4 text-sm text-green-100">
             {message}
           </div>
         )}
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {cards.map((card) => (
-            <div key={card.label} className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-              <p className="text-sm text-gray-400">{card.label}</p>
+            <div key={card.label} className="card p-6">
+              <p className="text-sm text-muted">{card.label}</p>
               <p className={`mt-3 text-3xl font-bold ${card.tone}`}>
                 {loading ? "..." : card.value.toLocaleString()}
               </p>
@@ -236,16 +236,16 @@ function AdminDashboard() {
           ))}
         </div>
 
-        <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900 p-6">
-          <p className="text-sm text-gray-400">Total platform investment volume</p>
-          <p className="mt-3 text-4xl font-bold text-blue-400">
+        <div className="mt-6 card p-6">
+          <p className="text-sm text-muted">Total platform investment volume</p>
+          <p className="mt-3 text-4xl font-bold text-[var(--navy)]">
             {loading ? "..." : `Rs.${stats.totalInvested.toLocaleString()}`}
           </p>
         </div>
 
-        <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900 p-6">
+        <div className="mt-6 card p-6">
           <h2 className="mb-2 text-xl font-semibold">Promote user to admin</h2>
-          <p className="mb-4 text-sm text-gray-400">
+          <p className="mb-4 text-sm text-muted">
             The first admin is set manually in Firestore. After that, you can create more admins here.
           </p>
           <form onSubmit={promoteToAdmin} className="flex flex-col gap-3 sm:flex-row">
@@ -255,19 +255,19 @@ function AdminDashboard() {
               onChange={(event) => setPromoteEmail(event.target.value)}
               placeholder="user@email.com"
               required
-              className="flex-1 rounded-lg border border-gray-700 bg-gray-950 px-4 py-3 outline-none focus:border-blue-500"
+              className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 outline-none focus:border-[var(--navy)]"
             />
             <button
               type="submit"
               disabled={promoting}
-              className="rounded-lg bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-700 disabled:opacity-60"
+              className="rounded-lg bg-[var(--navy)] px-5 py-3 font-semibold text-white hover:bg-[var(--navy-mid)] disabled:opacity-60"
             >
               {promoting ? "Promoting..." : "Make Admin"}
             </button>
           </form>
         </div>
 
-        <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900 p-6">
+        <div className="mt-6 card p-6">
           <h2 className="mb-5 text-xl font-semibold">Platform Overview</h2>
           <Bar
             data={platformChartData}
@@ -277,8 +277,8 @@ function AdminDashboard() {
                 legend: { display: false },
               },
               scales: {
-                x: { ticks: { color: "#d1d5db" }, grid: { color: "#1f2937" } },
-                y: { ticks: { color: "#d1d5db" }, grid: { color: "#1f2937" } },
+                x: { ticks: { color: "#475569" }, grid: { color: "#e2e8f0" } },
+                y: { ticks: { color: "#475569" }, grid: { color: "#e2e8f0" } },
               },
             }}
           />
